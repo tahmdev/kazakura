@@ -1,12 +1,15 @@
 import { Client } from "discord.js";
-import * as owo from "../commands/index";
+import { tagCache } from "../cache/tags";
+import * as commands from "../commands/index";
 
 export default (client: Client) => {
   client.on("ready", async () => {
     if (!client.user || !client.application) {
       return;
     }
-    console.log(owo);
+
+    await tagCache.buildCache();
+
 
     console.log(`${client.user.username} is online`);
   });
