@@ -13,7 +13,8 @@ export default (client: Client) => {
 
     if (interaction.type === InteractionType.ModalSubmit) {
       const { customId } = interaction;
-      commands[customId].handleModal(interaction, client);
+      const key = customId.split(".")[0];
+      commands[key].handleModal(interaction, client);
     } else if (
       interaction.type === InteractionType.ApplicationCommandAutocomplete
     ) {
