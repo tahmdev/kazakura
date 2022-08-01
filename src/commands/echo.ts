@@ -17,23 +17,16 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction, client: Client) {
   const modal = new ModalBuilder().setCustomId("echo").setTitle("Echo");
-  const nameInput = new TextInputBuilder()
-    .setCustomId("title")
-    .setLabel("Title")
-    .setStyle(TextInputStyle.Short);
   const bodyInput = new TextInputBuilder()
     .setCustomId("body")
     .setLabel("Body")
     .setStyle(TextInputStyle.Paragraph);
-  const actionRow1 =
-    new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
-      nameInput
-    );
-  const actionRow2 =
+
+  const actionRow =
     new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
       bodyInput
     );
-  modal.addComponents(actionRow1, actionRow2);
+  modal.addComponents(actionRow);
   await interaction.showModal(modal);
 }
 
@@ -41,7 +34,6 @@ export async function handleModal(
   interaction: ModalSubmitInteraction,
   client: Client
 ) {
-  const title = interaction.fields.getTextInputValue("title");
-  const body = interaction.fields.getTextInputValue("body");
-  interaction.reply({ content: body });
+  const content = interaction.fields.getTextInputValue("body");
+  interaction.reply({ content });
 }
