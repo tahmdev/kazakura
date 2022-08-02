@@ -39,7 +39,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     await tagCache.buildCache();
     return interaction.reply(`Deleted \`${tag}\``);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return interaction.reply(`Something went wrong.`);
   }
 }

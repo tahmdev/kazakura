@@ -10,6 +10,7 @@ export default (client: Client) => {
 
     await tagCache.buildCache();
 
+    console.log(tagCache.cache);
 
     console.log(`${client.user.username} is online`);
   });

@@ -19,11 +19,13 @@ export async function execute(interaction: CommandInteraction, client: Client) {
   const nameInput = new TextInputBuilder()
     .setCustomId("name")
     .setLabel("Name")
-    .setStyle(TextInputStyle.Short);
+    .setStyle(TextInputStyle.Short)
+    .setMaxLength(100);
   const bodyInput = new TextInputBuilder()
     .setCustomId("content")
     .setLabel("Content")
-    .setStyle(TextInputStyle.Paragraph);
+    .setStyle(TextInputStyle.Paragraph)
+    .setMaxLength(2000);
   const actionRow1 =
     new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
       nameInput
@@ -47,11 +49,12 @@ export async function handleModal(
   if (
     !interaction.guildId ||
     tagCache.cache[interaction.guildId]?.[tagData.name]
-  )
+  ) {
     return interaction.reply({
       content: `Tag \`${tagData.name}\` already exists.`,
       ephemeral: true,
     });
+  }
 
   try {
     await addDoc(
@@ -61,7 +64,7 @@ export async function handleModal(
     await tagCache.buildCache();
     return interaction.reply({ content: `Added tag \`${tagData.name}\`.` });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return interaction.reply({
       content: "Something went wrong.",
       ephemeral: true,
