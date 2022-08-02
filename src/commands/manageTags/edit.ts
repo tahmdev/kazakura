@@ -27,7 +27,12 @@ export async function execute(interaction: CommandInteraction, client: Client) {
   const tag = interaction.options.get("tag")?.value?.toString().trim();
   if (!interaction.guildId || !tag)
     return interaction.reply("Something went wrong!");
-  const { content, id } = tagCache.cache[interaction.guildId][tag];
+  const { content, id } = tagCache.cache[interaction.guildId][tag] || {};
+  if (!content || !id)
+    return interaction.reply({
+      content: `Tag \`${tag}\` does not exist.`,
+      ephemeral: true,
+    });
 
   const modal = new ModalBuilder()
     .setCustomId("manage_tags.edit")
