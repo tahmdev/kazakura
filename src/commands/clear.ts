@@ -11,7 +11,8 @@ export const data = new SlashCommandBuilder()
   .addIntegerOption((option) =>
     option.setName("amount").setDescription("Amount of messags to delete")
   )
-  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels);
+  .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+  .setDMPermission(false);
 export async function execute(interaction: CommandInteraction, client: Client) {
   const n = interaction.options.get("amount")?.value || 5;
   const channel = interaction.channel as TextChannel;

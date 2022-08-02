@@ -11,6 +11,7 @@ export const data = new SlashCommandBuilder()
   .setName("manage_tags")
   .setDescription("Add, edit, or delete tags")
   .setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels)
+  .setDMPermission(false)
   .addSubcommand((subcommand) =>
     subcommand.setName("add").setDescription("Add a tag")
   )
