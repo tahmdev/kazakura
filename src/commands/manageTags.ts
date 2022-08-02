@@ -15,7 +15,16 @@ export const data = new SlashCommandBuilder()
     subcommand.setName("add").setDescription("Add a tag")
   )
   .addSubcommand((subcommand) =>
-    subcommand.setName("edit").setDescription("Edit a tag")
+    subcommand
+      .setName("edit")
+      .setDescription("Edit a tag")
+      .addStringOption((option) =>
+        option
+          .setName("tag")
+          .setDescription("Enter a tag to edit")
+          .setAutocomplete(true)
+          .setRequired(true)
+      )
   )
   .addSubcommand((subcommand) =>
     subcommand
