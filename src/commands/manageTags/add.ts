@@ -46,10 +46,14 @@ export async function handleModal(
     name: interaction.fields.getTextInputValue("name"),
     text: interaction.fields.getTextInputValue("content"),
   };
-  if (
-    !interaction.guildId ||
-    tagCache.cache[interaction.guildId]?.[tagData.name]
-  ) {
+  const { guildId } = interaction;
+  if (!guildId)
+    return interaction.reply({
+      content: "Something went wrong.",
+      ephemeral: true,
+    });
+
+  if (tagCache.cache[guildId]?.[tagData.name]) {
     return interaction.reply({
       content: `Tag \`${tagData.name}\` already exists.`,
       ephemeral: true,
@@ -57,10 +61,7 @@ export async function handleModal(
   }
 
   try {
-    await addDoc(
-      collection(db, "guilds", `${interaction.guildId}`, "tags"),
-      tagData
-    );
+    await addDoc(collection(db, "guilds", `${guildId}`, "tags"), tagData);
     await tagCache.buildCache();
     return interaction.reply({ content: `Added tag \`${tagData.name}\`.` });
   } catch (error) {

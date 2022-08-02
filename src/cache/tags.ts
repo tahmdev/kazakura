@@ -3,7 +3,7 @@ import { collectionGroup, getDocs, query } from "firebase/firestore";
 
 interface Icache {
   [guildId: string]: {
-    [name: string]: string;
+    [name: string]: { content: string; id: string };
   };
 }
 
@@ -25,7 +25,7 @@ class TagCache {
       if (!guild) return;
       const { name, text } = doc.data();
       if (!newCache[guild]) newCache[guild] = {};
-      newCache[guild][name] = text;
+      newCache[guild][name] = { content: text, id: doc.ref.id };
     });
     this.#cache = newCache;
   }

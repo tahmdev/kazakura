@@ -29,9 +29,15 @@ export async function autoComplete(
 }
 
 export async function execute(interaction: CommandInteraction, client: Client) {
-  const tag = interaction.options.get("tag")?.value;
-  if (!interaction.guildId) return;
-  const content = tagCache.cache[interaction.guildId]?.[tag as string];
+  const { guildId } = interaction;
+  const tag = interaction.options.get("tag")?.value?.toString().trim();
+  if (!guildId || !tag)
+    return interaction.reply({
+      content: "Something went wrong.",
+      ephemeral: true,
+    });
+
+  const { content } = tagCache.cache[guildId]?.[tag];
   if (!content)
     return interaction.reply({
       content: `No tag called \`${tag}\``,

@@ -10,7 +10,6 @@ import {
   getDocs,
   query,
   where,
-  WhereFilterOp,
 } from "firebase/firestore";
 import { tagCache } from "../../cache/tags";
 import { db } from "../../firebase";
@@ -28,27 +27,17 @@ export async function autoComplete(
 
 export async function execute(interaction: CommandInteraction, client: Client) {
   const tag = interaction.options.get("tag")?.value?.toString().trim();
-
-  if (!interaction.guildId || !tag)
-    return interaction.reply(`Something went wrong.`);
-  if (!tagCache.cache[interaction.guildId][tag])
-    return interaction.reply(`Tag \`${tag}\` does not exist.`);
+  const { guildId } = interaction;
+  if (!guildId || !tag) return interaction.reply(`Something went wrong.`);
+  const { id } = tagCache.cache[guildId][tag];
+  if (!id) return interaction.reply(`Tag \`${tag}\` does not exist.`);
 
   try {
-    await deleteTag(tag, interaction.guildId);
+    await deleteDoc(doc(db, "guilds", `${guildId}`, "tags", id));
     await tagCache.buildCache();
     return interaction.reply(`Deleted \`${tag}\``);
   } catch (error) {
     console.error(error);
     return interaction.reply(`Something went wrong.`);
   }
-}
-
-async function deleteTag(tag: any, guild: string) {
-  const ref = collection(db, "guilds", `${guild}`, "tags");
-  const q = query(ref, where("name", "==", tag));
-  const snapshot = await getDocs(q);
-  snapshot.forEach(async (document) => {
-    await deleteDoc(doc(db, "guilds", `${guild}`, "tags", document.ref.id));
-  });
 }
