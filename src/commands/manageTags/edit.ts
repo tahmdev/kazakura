@@ -9,15 +9,6 @@ import {
   ModalSubmitInteraction,
   AutocompleteInteraction,
 } from "discord.js";
-import {
-  addDoc,
-  collection,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
 import { tagCache } from "../../cache/tags";
 import { db } from "../../firebase";
 
@@ -99,7 +90,7 @@ export async function handleModal(
   }
 
   try {
-    await setDoc(doc(db, "guilds", `${guildId}`, "tags", id), {
+    await db.collection(`guilds/${guildId}/tags`).doc(id).update({
       name,
       text,
     });

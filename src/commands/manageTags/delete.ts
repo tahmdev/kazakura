@@ -3,14 +3,6 @@ import {
   Client,
   AutocompleteInteraction,
 } from "discord.js";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
 import { tagCache } from "../../cache/tags";
 import { db } from "../../firebase";
 
@@ -33,7 +25,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
   if (!id) return interaction.reply(`Tag \`${tag}\` does not exist.`);
 
   try {
-    await deleteDoc(doc(db, "guilds", `${guildId}`, "tags", id));
+    await db.collection(`guilds/${guildId}/tags`).doc(id).delete();
     await tagCache.buildCache();
     return interaction.reply(`Deleted \`${tag}\``);
   } catch (error) {

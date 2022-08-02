@@ -1,5 +1,4 @@
 import { db } from "../firebase";
-import { collectionGroup, getDocs, query } from "firebase/firestore";
 
 interface Icache {
   [guildId: string]: {
@@ -18,9 +17,7 @@ class TagCache {
   }
   async buildCache() {
     const newCache = {} as Icache;
-    const tags = query(collectionGroup(db, "tags"));
-    const snap = await getDocs(tags);
-    snap.forEach((doc) => {
+    (await db.collectionGroup("tags").get()).forEach((doc) => {
       const guild = doc.ref.parent.parent?.id;
       if (!guild) return;
       const { name, text } = doc.data();

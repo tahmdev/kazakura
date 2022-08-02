@@ -8,7 +8,6 @@ import {
   ModalActionRowComponentBuilder,
   ModalSubmitInteraction,
 } from "discord.js";
-import { addDoc, collection } from "firebase/firestore";
 import { tagCache } from "../../cache/tags";
 import { db } from "../../firebase";
 
@@ -61,7 +60,7 @@ export async function handleModal(
   }
 
   try {
-    await addDoc(collection(db, "guilds", `${guildId}`, "tags"), tagData);
+    await db.collection(`guilds/${guildId}/tags`).doc().create(tagData);
     await tagCache.buildCache();
     return interaction.reply({ content: `Added tag \`${tagData.name}\`.` });
   } catch (error) {

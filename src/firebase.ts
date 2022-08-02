@@ -1,13 +1,14 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-const firebaseConfig = {
-  apiKey: "AIzaSyBX88V2NbgK9oNUP4kJPpyIkJUnJBZg3Ls",
-  authDomain: "kazakura-77ea0.firebaseapp.com",
-  projectId: "kazakura-77ea0",
-  storageBucket: "kazakura-77ea0.appspot.com",
-  messagingSenderId: "107594122170",
-  appId: "1:107594122170:web:9aa736f560cb4b0cde1383",
-};
+import "dotenv/config";
+import { credential } from "firebase-admin";
+import { initializeApp } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 
-const app = initializeApp(firebaseConfig);
+const app = initializeApp({
+  credential: credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+  }),
+});
+
 export const db = getFirestore(app);
