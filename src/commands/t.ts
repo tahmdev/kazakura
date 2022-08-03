@@ -21,7 +21,7 @@ export async function autoComplete(
   client: Client
 ) {
   if (!interaction.guildId) return;
-  const focusedValue = interaction.options.getFocused();
+  const focusedValue = interaction.options.getFocused().toLocaleLowerCase();
   const choices = Object.keys(tagCache.cache[interaction.guildId] || {});
   const filtered = choices.filter((el) => el.startsWith(focusedValue));
   await interaction.respond(filtered.map((el) => ({ name: el, value: el })));

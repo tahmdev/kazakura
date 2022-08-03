@@ -76,8 +76,8 @@ export async function handleModal(
 ) {
   const { guildId } = interaction;
   const id = interaction.fields.getTextInputValue("id");
-  const name = interaction.fields.getTextInputValue("name");
-  const text = interaction.fields.getTextInputValue("content");
+  const name = interaction.fields.getTextInputValue("name").toLocaleLowerCase();
+  const content = interaction.fields.getTextInputValue("content");
 
   if (!guildId) {
     return interaction.reply({
@@ -97,7 +97,7 @@ export async function handleModal(
   try {
     await db.doc(`guilds/${guildId}/tags/${id}`).update({
       name,
-      text,
+      content,
     });
     return interaction.reply({ content: `Edited tag \`${name}\`.` });
   } catch (error) {

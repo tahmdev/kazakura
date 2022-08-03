@@ -3,7 +3,7 @@ import { Routes } from "discord.js";
 import { REST } from "@discordjs/rest";
 import * as commandModules from "./commands/index";
 
-const { TOKEN, CLIENT_ID } = process.env;
+const { TOKEN: TOKEN, LIENT_ID: CLIENT_ID } = process.env;
 const commands = [];
 
 for (const module of Object.values<any>(commandModules)) {

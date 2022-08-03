@@ -24,12 +24,10 @@ class TagCache {
       snapshot.forEach((doc) => {
         const guild = doc.ref.parent.parent?.id;
         if (!guild) return;
-        const { name, text } = doc.data();
+        const { name, content } = doc.data();
         if (!newCache[guild]) newCache[guild] = {};
-        newCache[guild][name] = { content: text, id: doc.ref.id };
-        console.log("READING SNAP");
+        newCache[guild][name] = { content: content, id: doc.ref.id };
       });
-      console.log("UPDATING CACHE");
       this.#cache = newCache;
     });
   }

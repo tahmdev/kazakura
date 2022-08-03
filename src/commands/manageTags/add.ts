@@ -41,10 +41,8 @@ export async function handleModal(
   interaction: ModalSubmitInteraction,
   client: Client
 ) {
-  const tagData = {
-    name: interaction.fields.getTextInputValue("name"),
-    text: interaction.fields.getTextInputValue("content"),
-  };
+  const name = interaction.fields.getTextInputValue("name").toLocaleLowerCase();
+  const content = interaction.fields.getTextInputValue("content");
   const { guildId } = interaction;
   if (!guildId)
     return interaction.reply({
@@ -52,16 +50,19 @@ export async function handleModal(
       ephemeral: true,
     });
 
-  if (tagCache.cache[guildId]?.[tagData.name]) {
+  if (tagCache.cache[guildId]?.[name]) {
     return interaction.reply({
-      content: `Tag \`${tagData.name}\` already exists.`,
+      content: `Tag \`${name}\` already exists.`,
       ephemeral: true,
     });
   }
 
   try {
-    await db.collection(`guilds/${guildId}/tags`).doc().create(tagData);
-    return interaction.reply({ content: `Added tag \`${tagData.name}\`.` });
+    await db
+      .collection(`guilds/${guildId}/tags`)
+      .doc()
+      .create({ name, content });
+    return interaction.reply({ content: `Added tag \`${name}\`.` });
   } catch (error) {
     console.error(error);
     return interaction.reply({
