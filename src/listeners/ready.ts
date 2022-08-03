@@ -11,7 +11,10 @@ export default (client: Client) => {
       name: "言語に翼を。思考を空へ──",
       type: ActivityType.Playing,
     });
-    await tagCache.buildCache();
+    tagCache.buildCache();
+    setTimeout(() => {
+      console.log(tagCache.cache);
+    }, 300);
 
     console.log(`${client.user.username} is online`);
   });

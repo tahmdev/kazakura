@@ -95,11 +95,10 @@ export async function handleModal(
   }
 
   try {
-    await db.collection(`guilds/${guildId}/tags`).doc(id).update({
+    await db.doc(`guilds/${guildId}/tags/${id}`).update({
       name,
       text,
     });
-    tagCache.buildCache();
     return interaction.reply({ content: `Edited tag \`${name}\`.` });
   } catch (error) {
     console.error(error);

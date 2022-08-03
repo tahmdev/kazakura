@@ -25,8 +25,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
   if (!id) return interaction.reply(`Tag \`${tag}\` does not exist.`);
 
   try {
-    await db.collection(`guilds/${guildId}/tags`).doc(id).delete();
-    await tagCache.buildCache();
+    await db.doc(`guilds/${guildId}/tags/${id}`).delete();
     return interaction.reply(`Deleted \`${tag}\``);
   } catch (error) {
     console.error(error);
