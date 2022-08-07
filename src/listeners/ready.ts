@@ -1,7 +1,7 @@
 import { ActivityType, Client } from "discord.js";
 import { tagCache } from "../cache/tags";
-import * as commands from "../commands/index";
-
+import * as commandModules from "../commands/index";
+const commands = Object(commandModules);
 export default (client: Client) => {
   client.on("ready", async () => {
     if (!client.user || !client.application) {
@@ -12,10 +12,11 @@ export default (client: Client) => {
       type: ActivityType.Playing,
     });
     tagCache.buildCache();
-    setTimeout(() => {
-      console.log(tagCache.cache);
-    }, 300);
 
-    console.log(`${client.user.username} is online`);
+    console.log(
+      `${client.user.username} initialized with ${
+        Object.keys(commands).length
+      } commands.`
+    );
   });
 };
