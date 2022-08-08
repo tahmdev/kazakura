@@ -9,28 +9,29 @@ import {
   ModalSubmitInteraction,
   AutocompleteInteraction,
 } from "discord.js";
-import { tagCache } from "../../cache/tags";
+import { cache } from "../../cache/cache";
 import { db } from "../../firebase";
 
 export async function autoComplete(
   interaction: AutocompleteInteraction,
   client: Client
 ) {
-  if (!interaction.guildId) return;
+  const { guildId } = interaction;
+  if (!guildId) return;
   const focusedValue = interaction.options.getFocused();
-  const choices = Object.keys(tagCache.cache[interaction.guildId] || {});
+  const choices = Object.keys(cache.guild(guildId).tags || {});
   const filtered = choices.filter((el) => el.startsWith(focusedValue));
   await interaction.respond(filtered.map((el) => ({ name: el, value: el })));
 }
 
 export async function execute(interaction: CommandInteraction, client: Client) {
-  const tag = interaction.options.get("tag")?.value?.toString().trim();
-  if (!interaction.guildId || !tag)
-    return interaction.reply("Something went wrong!");
-  const { content, id } = tagCache.cache[interaction.guildId][tag] || {};
+  const name = interaction.options.get("tag")?.value?.toString().trim();
+  const { guildId } = interaction;
+  if (!guildId || !name) return interaction.reply("Something went wrong!");
+  const { content, id } = cache.guild(guildId).tags[name] || {};
   if (!content || !id)
     return interaction.reply({
-      content: `Tag \`${tag}\` does not exist.`,
+      content: `Tag \`${name}\` does not exist.`,
       ephemeral: true,
     });
 
@@ -47,7 +48,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     .setLabel("Name")
     .setStyle(TextInputStyle.Short)
     .setMaxLength(100)
-    .setValue(tag);
+    .setValue(name);
   const bodyInput = new TextInputBuilder()
     .setCustomId("content")
     .setLabel("Content")
@@ -86,7 +87,9 @@ export async function handleModal(
     });
   }
 
-  if (!Object.entries(tagCache.cache[guildId]).some((el) => el[1].id === id)) {
+  if (
+    !Object.entries(cache.guild(guildId).tags).some((el) => el[1].id === id)
+  ) {
     return interaction.reply({
       content:
         "Could not find tag with matching ID. Make sure you do not edit the ID field.",

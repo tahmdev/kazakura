@@ -1,5 +1,5 @@
 import { ActivityType, Client } from "discord.js";
-import { tagCache } from "../cache/tags";
+import { cache } from "../cache/cache";
 import * as commandModules from "../commands/index";
 const commands = Object(commandModules);
 export default (client: Client) => {
@@ -11,8 +11,7 @@ export default (client: Client) => {
       name: "言語に翼を。思考を空へ──",
       type: ActivityType.Playing,
     });
-    tagCache.buildCache();
-
+    cache.buildCache();
     console.log(
       `${client.user.username} initialized with ${
         Object.keys(commands).length
