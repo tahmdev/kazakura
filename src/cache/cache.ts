@@ -6,11 +6,20 @@ interface TagCache {
   };
 }
 
+interface Reminder {
+  message: string;
+  time: number;
+  author: string;
+  createdAt: number;
+  id: string;
+}
+
 class Cache {
   #tags: TagCache;
-
+  reminders: Reminder[];
   constructor() {
     this.#tags = {} as TagCache;
+    this.reminders = [];
   }
 
   guild(id: string) {
@@ -27,6 +36,17 @@ class Cache {
         newTags[guildId][name] = { content: content, id: doc.ref.id };
       });
       this.#tags = newTags;
+    });
+
+    db.collectionGroup("reminders").onSnapshot((snapshot) => {
+      const newReminders: Reminder[] = [];
+      snapshot.forEach((doc) => {
+        const author = doc.ref.parent.parent?.id;
+        const { time, message, createdAt } = doc.data();
+        if (!author || !time) return;
+        newReminders.push({ author, time, message, createdAt, id: doc.ref.id });
+      });
+      this.reminders = newReminders.sort((a, b) => a.time - b.time);
     });
   }
 }
