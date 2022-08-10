@@ -2,7 +2,7 @@ import { SlashCommandBuilder, CommandInteraction, Client } from "discord.js";
 import { db } from "../firebase";
 export const data = new SlashCommandBuilder()
   .setName("r")
-  .setDescription("Get the definition of a word")
+  .setDescription("Set a reminder")
   .addNumberOption((option) =>
     option.setName("days").setDescription("Set amount of days ")
   )
