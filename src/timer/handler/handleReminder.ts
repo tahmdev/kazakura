@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import { Client, EmbedBuilder } from "discord.js";
 import { cache } from "../../cache/cache";
 import { db } from "../../firebase";
 
@@ -9,13 +9,13 @@ export const handleReminder = (client: Client) => {
   for (let i = 0; i < filteredReminders.length; i++) {
     console.log(cache.reminders);
     const { message, author, createdAt, id } = filteredReminders[i];
-    client.users
-      .fetch(author)
-      .then((user) =>
-        user.send(
-          `You asked me to set a reminder: \n ${message} \n This reminder has been created <t:${createdAt}:F>`
-        )
-      );
+    const embed = new EmbedBuilder()
+      .setTitle("Reminder")
+      .setColor("#1fde85")
+      .setDescription(message)
+      .setTimestamp(new Date(createdAt * 1000))
+      .setFooter({ text: "Created at" });
+    client.users.fetch(author).then((user) => user.send({ embeds: [embed] }));
     db.doc(`users/${author}/reminders/${id}`).delete();
     cache.reminders.pop();
   }
