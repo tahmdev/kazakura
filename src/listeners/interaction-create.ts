@@ -26,7 +26,7 @@ export default (client: Client) => {
       const { commandName } = interaction;
 
       // interaction.channel will be null if it's a DM
-      if (!interaction.channel) {
+      if (!interaction.channel || commandName === "permissions") {
         return commands[commandName].execute(interaction, client);
       }
 
