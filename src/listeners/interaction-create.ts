@@ -17,16 +17,16 @@ export default (client: Client) => {
       const { customId } = interaction;
       const key = customId.split(".")[0];
       commands[key].handleModal(interaction, client);
-    } else if (
-      interaction.type === InteractionType.ApplicationCommandAutocomplete
-    ) {
+    }
+    if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
       const { commandName } = interaction;
       commands[commandName].autoComplete(interaction, client);
-    } else {
+    }
+    if (interaction.type === InteractionType.ApplicationCommand) {
       const { commandName } = interaction;
 
+      // interaction.channel will be null if it's a DM
       if (!interaction.channel) {
-        // Will be null if it's a DM
         return commands[commandName].execute(interaction, client);
       }
 
