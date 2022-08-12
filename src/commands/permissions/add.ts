@@ -16,7 +16,8 @@ export async function autoComplete(
   let choices: any[] = [];
   const focusedValue = interaction.options.getFocused(true);
   const roles = interaction.guild?.roles.cache;
-
+  const cmd = interaction.options.get("cmd")?.value?.toString();
+  const { permissions } = cache.guild(guildId);
   if (focusedValue.name === "cmd") {
     choices = Object.keys(commands).map((el) => {
       return { name: el, value: el };
@@ -24,10 +25,11 @@ export async function autoComplete(
   }
 
   if (focusedValue.name === "role" && roles) {
+    if (!cmd) return [];
     choices = roles
       .filter((el) => {
         const { id } = el;
-        return !Object.keys(cache.guild(guildId).permissions).includes(id);
+        return !permissions[cmd].includes(id);
       })
       .map((el) => {
         const { name, id } = el;
