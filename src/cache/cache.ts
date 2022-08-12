@@ -71,7 +71,6 @@ class Cache {
         newPermissions[guildId][cmd] = roleIds || [];
       });
       this.#permissions = newPermissions;
-      console.log(this.#permissions);
     });
   }
 }

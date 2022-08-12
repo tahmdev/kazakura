@@ -15,7 +15,7 @@ export const data = new SlashCommandBuilder()
   .addSubcommand((subcommand) =>
     subcommand
       .setName("add")
-      .setDescription("Add a tag")
+      .setDescription("Add permissions")
       .addStringOption((option) =>
         option
           .setName("cmd")
@@ -26,7 +26,26 @@ export const data = new SlashCommandBuilder()
       .addStringOption((option) =>
         option
           .setName("role")
+          .setDescription("Select a role")
+          .setAutocomplete(true)
+          .setRequired(true)
+      )
+  )
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("delete")
+      .setDescription("Remove permissions")
+      .addStringOption((option) =>
+        option
+          .setName("cmd")
           .setDescription("Select a command")
+          .setAutocomplete(true)
+          .setRequired(true)
+      )
+      .addStringOption((option) =>
+        option
+          .setName("role")
+          .setDescription("Select a role")
           .setAutocomplete(true)
           .setRequired(true)
       )
