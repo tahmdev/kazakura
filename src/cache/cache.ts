@@ -6,6 +6,12 @@ interface TagCache {
   };
 }
 
+interface Permissions {
+  [guildId: string]: {
+    [name: string]: string[];
+  };
+}
+
 interface Reminder {
   message: string;
   time: number;
@@ -17,13 +23,18 @@ interface Reminder {
 class Cache {
   #tags: TagCache;
   reminders: Reminder[];
+  #permissions: Permissions;
   constructor() {
     this.#tags = {} as TagCache;
     this.reminders = [];
+    this.#permissions = {} as Permissions;
   }
 
   guild(id: string) {
-    return { tags: this.#tags[id] || {} };
+    return {
+      tags: this.#tags[id] || {},
+      permissions: this.#permissions[id] || {},
+    };
   }
   buildCache() {
     db.collectionGroup("tags").onSnapshot((snapshot) => {
@@ -47,6 +58,20 @@ class Cache {
         newReminders.push({ author, time, message, createdAt, id: doc.ref.id });
       });
       this.reminders = newReminders.sort((a, b) => a.time - b.time);
+    });
+
+    db.collectionGroup("permissions").onSnapshot((snapshot) => {
+      const newPermissions = {} as Permissions;
+      snapshot.forEach((doc) => {
+        const guildId = doc.ref.parent.parent?.id;
+        const { roleIds } = doc.data();
+        const cmd = doc.ref.id;
+        if (!guildId) return;
+        if (!newPermissions[guildId]) newPermissions[guildId] = {};
+        newPermissions[guildId][cmd] = roleIds || [];
+      });
+      this.#permissions = newPermissions;
+      console.log(this.#permissions);
     });
   }
 }

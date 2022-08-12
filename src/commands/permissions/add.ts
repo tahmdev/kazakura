@@ -53,7 +53,7 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     await db
       .collection(`guilds/${guildId}/permissions`)
       .doc(cmd)
-      .set({ id: [roleId, ...permissions] });
+      .set({ roleIds: [roleId, ...permissions] });
     return interaction.reply({
       content: `Added permissions to use ${cmd} to <@&${roleId}>`,
     });
