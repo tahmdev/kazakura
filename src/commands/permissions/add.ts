@@ -29,6 +29,7 @@ export async function autoComplete(
     choices = roles
       .filter((el) => {
         const { id } = el;
+        if (!permissions[cmd]) return true;
         return !permissions[cmd].includes(id);
       })
       .map((el) => {
