@@ -12,7 +12,7 @@ export const handleReminder = (client: Client) => {
     const embed = new EmbedBuilder()
       .setTitle("Reminder")
       .setColor("#1fde85")
-      .setDescription(message)
+      .setDescription(message || " ")
       .setTimestamp(new Date(createdAt * 1000))
       .setFooter({ text: "Created at" });
     client.users.fetch(author).then((user) => user.send({ embeds: [embed] }));
