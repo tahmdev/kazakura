@@ -25,8 +25,8 @@ export default (client: Client) => {
     if (interaction.type === InteractionType.ApplicationCommand) {
       const { commandName } = interaction;
 
-      // interaction.channel will be null if it's a DM
-      if (!interaction.channel || commandName === "permissions") {
+      if (!interaction.channel) await interaction.user.createDM();
+      if (interaction.channel?.type === 1 || commandName === "permissions") {
         return commands[commandName].execute(interaction, client);
       }
 
