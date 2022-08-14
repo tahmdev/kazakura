@@ -16,7 +16,7 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction: CommandInteraction, client: Client) {
   if (interaction.user.id !== process.env.OWNER_ID)
     return interaction.reply({
-      content: `This command is only usable by <@966692536758452315>.`,
+      content: `This command is only usable by <@${process.env.OWNER_ID}>.`,
     });
 
   try {

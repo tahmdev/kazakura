@@ -8,7 +8,7 @@ import {
   ModalActionRowComponentBuilder,
   ModalSubmitInteraction,
 } from "discord.js";
-import { tagCache } from "../../cache/tags";
+import { cache } from "../../cache/cache";
 import { db } from "../../firebase";
 
 export async function execute(interaction: CommandInteraction, client: Client) {
@@ -50,7 +50,9 @@ export async function handleModal(
       ephemeral: true,
     });
 
-  if (tagCache.cache[guildId]?.[name]) {
+  const { tags } = cache.guild(guildId);
+  console.log(tags);
+  if (tags[name]) {
     return interaction.reply({
       content: `Tag \`${name}\` already exists.`,
       ephemeral: true,
