@@ -7,7 +7,7 @@ import {
 import * as subCommandModules from "./reminder/index";
 export const data = new SlashCommandBuilder()
   .setName("r")
-  .setDescription("Set a reminder")
+  .setDescription("Set, get and delete reminders")
   .addSubcommand((subCommand) =>
     subCommand
       .setName("set")
