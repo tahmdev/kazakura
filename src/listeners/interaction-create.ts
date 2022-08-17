@@ -15,6 +15,7 @@ export default (client: Client) => {
 
     if (interaction.type === InteractionType.ModalSubmit) {
       const { customId } = interaction;
+      // Modal CustomIDs need to follow the pattern of CMDNAME.MODALNAME
       const key = customId.split(".")[0];
       commands[key].handleModal(interaction, client);
     }

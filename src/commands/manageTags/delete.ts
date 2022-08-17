@@ -21,7 +21,11 @@ export async function autoComplete(
 export async function execute(interaction: CommandInteraction, client: Client) {
   const name = interaction.options.get("tag")?.value?.toString().trim();
   const { guildId } = interaction;
-  if (!guildId || !name) return interaction.reply(`Something went wrong.`);
+  if (!guildId || !name)
+    return interaction.reply({
+      content: "Something went wrong.",
+      ephemeral: true,
+    });
 
   const { id } = cache.guild(guildId).tags[name] || {};
   if (!id) return interaction.reply(`Tag \`${name}\` does not exist.`);
@@ -31,6 +35,9 @@ export async function execute(interaction: CommandInteraction, client: Client) {
     return interaction.reply(`Deleted \`${name}\``);
   } catch (error) {
     console.error(error);
-    return interaction.reply(`Something went wrong.`);
+    return interaction.reply({
+      content: "Something went wrong.",
+      ephemeral: true,
+    });
   }
 }
