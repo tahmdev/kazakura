@@ -26,6 +26,18 @@ export const data = new SlashCommandBuilder()
           .setName("message")
           .setDescription("Enter a message to send with the reminder")
       )
+  )
+  .addSubcommand((subCommand) =>
+    subCommand
+      .setName("delete")
+      .setDescription("Delete a reminder")
+      .addStringOption((option) =>
+        option
+          .setName("reminder")
+          .setDescription("Choose a reminder to delete")
+          .setAutocomplete(true)
+          .setRequired(true)
+      )
   );
 
 export async function autoComplete(
