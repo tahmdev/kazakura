@@ -3,7 +3,17 @@ import { Routes } from "discord.js";
 import { REST } from "@discordjs/rest";
 import * as commandModules from "./commands/index";
 
-const { TOKEN: TOKEN, CLIENT_ID: CLIENT_ID } = process.env;
+const { TOKEN, CLIENT_ID, LIVE_TOKEN, LIVE_CLIENT_ID, NODE_ENV } = process.env;
+let token;
+let clientId;
+if (NODE_ENV === "live") {
+  token = LIVE_TOKEN;
+  clientId = LIVE_CLIENT_ID;
+} else {
+  clientId = CLIENT_ID;
+  token = TOKEN;
+}
+
 const commands = [];
 
 for (const module of Object.values<any>(commandModules)) {
@@ -17,7 +27,11 @@ if (TOKEN !== undefined && CLIENT_ID !== undefined) {
     })
     .then(() =>
       console.log(
-        `Successfully registered ${commands.length} application commands.`
+        `Successfully registered ${
+          commands.length
+        } application commands to the ${
+          NODE_ENV === "live" ? "LIVE" : "DEV"
+        } build.`
       )
     )
     .catch(console.error);

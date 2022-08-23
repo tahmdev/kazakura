@@ -7,7 +7,8 @@
     "build": "tsc",
     "start": "node build/index.js",
     "dev": "concurrently \"tsc -w\" \"nodemon build/index.js\"",
-    "cmd": "tsc && node build/deploy-commands.js"
+    "cmd": "tsc && node build/deploy-commands.js",
+    "cmdlive": "set NODE_ENV=live&& tsc && node build/deploy-commands.js"
   },
   "keywords": [],
   "author": "",
