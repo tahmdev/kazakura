@@ -15,7 +15,11 @@ export const handleReminder = (client: Client) => {
       .setDescription(message || " ")
       .setTimestamp(new Date(createdAt * 1000))
       .setFooter({ text: "Created at" });
-    client.users.fetch(author).then((user) => user.send({ embeds: [embed] }));
+    try {
+      client.users.fetch(author).then((user) => user.send({ embeds: [embed] }));
+    } catch (error) {
+      console.error(error);
+    }
     try {
       db.doc(`users/${author}/reminders/${id}`).delete();
     } catch (error) {
